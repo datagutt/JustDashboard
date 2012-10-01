@@ -5,40 +5,99 @@
 	<link href="css/grid.css" rel="stylesheet" />
 	<link href="css/dashboard.css" rel="stylesheet" />
 	<link href="css/custom.css" rel="stylesheet" />
-	<link href="boards/time/style.css" rel="stylesheet" />
+	<script type="text/javascript">	
+		var config = {
+			company: 'Datagutt Inc.',
+			boards: {
+			'time': {'grid': '12'},
+			'test': {'grid': '4'},
+			'twitter': {'grid': '12', 'user': 'datagutt'}
+			}
+		};
+	</script>
 </head>
 <body>
-	<h1>Pie</h1>
+	<h1 id="company">{{ COMPANY }}</h1>
 	<div id="dashboard" class="container">
 		<div class="row">
-			<ul class="boards">
-				<li class="board span12 first">
-					<div class="time_board">
-						<div class="clock">23:53</div>
-						<div class="date">September 30, 2012</div>
-					</div>
-				</li>
-				<li class="board span4">
-					<div class="test_board">
-						<p>test</p>
-					</div>
-				</li>	
-				<li class="board span4">
-					<div class="test_board">
-						<p>test</p>
-					</div>
-				</li>
-				<li class="board span12">
-					<div class="twitter_board">
-						<p><a href="http://twitter.com/datagutt">@datagutt</a>: <span class="text">i like pie</span></p>
-					</div>
-				</li>
-			</ul>
+			<ul class="boards"></ul>
 		</div>
 	</div>
-	<noscript><p>You need javascript to view this dashboard.</p></noscript>
+	<div id="noscriptMessage">
+		<p>You need javascript to view this dashboard.</p>
+	</div>
+	<script src="scripts/LIB.js"></script>
+	<script src="scripts/loader.js"></script>
+	<!-- Libraries that various boards require -->
+	<script src="scripts/twitter.js"></script>
+	<script src="http://cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js"></script>
 	<script>
-		
+		(function(global){
+			var ucfirst = function(str){
+				return str.charAt(0).toUpperCase() + str.substr(1);
+			}
+			if(LIB && LIB.isHostMethod(document, 'getElementsByTagName')){
+				var scripts = document.getElementsByTagName('script');
+			}
+			function handleBoard(board, boardConfig){
+				if(board){
+					var gBoard = global[ucfirst(board)+'Board'];
+					if(gBoard){
+						var b = new gBoard;
+					}
+				}
+				// Generate board content and put it in <ul>
+				if(b && b.init && LIB.areFeatures('query', 'setHtml')){
+					var ul = LIB.query('ul');
+					if(ul && ul[0]){
+						var grid = boardConfig.grid ? boardConfig.grid : '4';
+						var el = document.createElement('li');
+						el.className = 'board';
+						el.className += ' span'+grid;
+						LIB.setHtml(el, '<div class="'+board+'_board"></div>');
+						ul[0].appendChild(el);
+						var boardDiv = el.getElementsByTagName('div');
+						if(boardDiv && boardDiv[0]){
+							b.init(boardDiv[0], boardConfig);
+						}
+					}
+				}
+			}
+			function loadBoards(boards){
+				var board;
+				for(board in boards){
+					var boardConfig = boards[board];
+					if(LIB.isHostMethod(document, 'createElement') && board){
+						var time = (new Date).getTime();
+						// Load styles
+						var link = document.createElement('link');
+						link.href = 'boards/'+board+'/board.css?'+time;
+						link.rel = 'stylesheet';
+						if(LIB.isHostObjectProperty(document, 'head') && LIB.isHostMethod(document.head, 'appendChild')){
+							document.head.appendChild(link);
+						}
+						// Load script
+						var url = 'boards/'+board+'/board.js?'+time;
+						Loader.load(url, [board, boardConfig], function(args){
+							handleBoard(args[0], args[1]);
+						});
+					}
+				}
+			}
+			if(LIB && LIB.areFeatures('deferUntilReady')){
+				LIB.deferUntilReady(function(){
+					if(LIB && LIB.isHostObjectProperty(document, 'documentElement')){
+						document.documentElement.className = document.documentElement.className.replace('no-js', 'js');
+					}
+					document.title = document.title.replace('{{ COMPANY }}', config.company);
+					if(LIB && LIB.isHostMethod(document, 'getElementById')){
+						var companyTitle = document.getElementById('company');
+						companyTitle.innerHTML = companyTitle.innerHTML.replace('{{ COMPANY }}', config.company);
+					}
+					loadBoards(config.boards);
+				});
+			}
+		})(window);
 	</script>
 </body>
 </html>

@@ -21,11 +21,15 @@ a {
 ul {
 	list-style-type: none;
 }
+.no-js #company {
+	display: none;
+}
+.no-js #dashboard {
+	display: none;
+}
+.js #noscriptMessage {
+	display: none;
+}
 .board {
-	margin: 30px 20px;
-	display: -moz-inline-stack;
-	display: inline-block;
-	vertical-align: top;
-	zoom: 1;
-	*display: inline;
+	padding: 30px 20px;
 }
