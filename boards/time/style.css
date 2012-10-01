@@ -1,0 +1,11 @@
+.time_board {
+	font-size: 250%;
+}
+.time_board .time {
+	color: #d00;
+	text-shadow: 0px 0px 7px #e90;
+}
+.time_board .date {
+	color: #bbb;
+	font-size: 66%;
+}
