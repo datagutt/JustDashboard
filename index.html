@@ -2,15 +2,15 @@
 <html class="no-js">
 <head>
 	<title>Dashboard for {{ COMPANY }}</title>
-	<link href="css/grid.css" rel="stylesheet" />
-	<link href="css/dashboard.css" rel="stylesheet" />
-	<link href="css/custom.css" rel="stylesheet" />
+	<link href="/css/grid.css" rel="stylesheet" />
+	<link href="/css/dashboard.css" rel="stylesheet" />
+	<link href="/css/custom.css" rel="stylesheet" />
 	<script type="text/javascript">	
 		var config = {
 			company: 'Datagutt Inc.',
 			boards: {
 			'time': {'grid': '12'},
-			'test': {'grid': '4'},
+			'weather': {'grid': '4', 'location': 'Askim, Norway'},
 			'twitter': {'grid': '12', 'user': 'datagutt'}
 			}
 		};
@@ -26,10 +26,10 @@
 	<div id="noscriptMessage">
 		<p>You need javascript to view this dashboard.</p>
 	</div>
-	<script src="scripts/LIB.js"></script>
-	<script src="scripts/loader.js"></script>
+	<script src="/scripts/LIB.js"></script>
+	<script src="/scripts/loader.js"></script>
 	<!-- Libraries that various boards require -->
-	<script src="scripts/twitter.js"></script>
+	<script src="/scripts/twitter.js"></script>
 	<script src="http://cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js"></script>
 	<script>
 		(function(global){
@@ -47,7 +47,7 @@
 					}
 				}
 				// Generate board content and put it in <ul>
-				if(b && b.init && LIB.areFeatures('query', 'setHtml')){
+				if(b && b.init && LIB.areFeatures('query', 'setHtml') && LIB.isHostMethod(document, 'getElementsByTagName') && LIB.isHostMethod(document, 'createElement')){
 					var ul = LIB.query('ul');
 					if(ul && ul[0]){
 						var grid = boardConfig.grid ? boardConfig.grid : '4';
@@ -89,9 +89,12 @@
 					if(LIB && LIB.isHostObjectProperty(document, 'documentElement')){
 						document.documentElement.className = document.documentElement.className.replace('no-js', 'js');
 					}
-					document.title = document.title.replace('{{ COMPANY }}', config.company);
+					if(document.title){
+						document.title = document.title.replace('{{ COMPANY }}', config.company);
+					}
 					if(LIB && LIB.isHostMethod(document, 'getElementById')){
-						var companyTitle = document.getElementById('company');
+						var companyTitle = document.getElementById('company');							var button = document.getElementById('btn');
+						// Replace company title
 						companyTitle.innerHTML = companyTitle.innerHTML.replace('{{ COMPANY }}', config.company);
 					}
 					loadBoards(config.boards);
