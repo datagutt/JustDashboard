@@ -8,7 +8,6 @@ TwitterBoard.prototype.init = function(el, config){
 		self.update(el, user);
 	}, 10 * 60 * 1000);
 }
-
 TwitterBoard.prototype.update = function(el, user){
 	if(twitter && twitter.getTimeline){
 		twitter.getTimeline('datagutt', function(tweets){

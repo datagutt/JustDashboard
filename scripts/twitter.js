@@ -73,7 +73,7 @@ if (typeof exports != 'undefined') { exports.twitter = twitter; } // for node.js
 		if (api == 'search') {
 			var url = 'http://search.twitter.com/search.json?' + _getObjectAsURIParams(args);
 		} else {
-			var url = 'http://twitter.com/' + api + '/' + action + '.json?' + _getObjectAsURIParams(args);
+			var url = 'http://api.twitter.com/1/' + api + '/' + action + '.json?' + _getObjectAsURIParams(args);
 		}
 		if (_cache[url]) {
 			setTimeout(function(){ callback(_cache[url]); }, 0);
