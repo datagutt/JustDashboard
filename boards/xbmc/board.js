@@ -23,15 +23,15 @@ var XbmcRequest = function XbmcRequest(options) {
 	}
 	return result;
 };
-var XBMCBoard = function(){};
-XBMCBoard.prototype.init = function(el, config){
+var XbmcBoard = function(){};
+XbmcBoard.prototype.init = function(el, config){
 	var self = this;
 	self.update(el, config.host, config.port);
 	setInterval(function(){
 		self.update(el, config.host, config.port);
 	}, 1 * 60 * 1000);
 }
-XBMCBoard.prototype.callback = function(data){
+XbmcBoard.prototype.callback = function(data){
 	var self = this;
 	var item, showtitle = '', season = 0, episode = 0, title = '';
 	var parsed = eval('(' + x + ')');
@@ -51,36 +51,11 @@ XBMCBoard.prototype.callback = function(data){
 		el.innerHTML = '<p>Can not load XBMC data</p>';
 	}
 }
-XBMCBoard.prototype.update = function(el, host, port){
+XbmcBoard.prototype.update = function(el, host, port){
 	var self = this;
 	if(!port){
 		port = 8080;
 	}
-	var url = 'http://'+host+':'+port+'/jsonrpc?Player.GetItem&playerid=1';
-	/*if(LIB && LIB.areFeatures('ajaxPost')){
-		LIB.ajaxPost(url, {
-			'success': function(data){
-				var parsed;
-				if(LIB && LIB.areFeatures('parseJson') && data){
-					parsed = LIB.parseJson(data);
-				}
-				if(parsed){
-					self.callback(el, parsed);
-				}
-				console.log(data);
-			}
-		});
-	}*/
-	/*if(LIB && LIB.areFeatures('parseJson', 'forEach')){
-		if(Loader && LIB.isHostMethod(Loader, 'load')){
-			window.xbmcCallback = self.callback;
-			Loader.load(url, false, function(){
-				if(window.xbmcCallback && typeof window.xbmcCallback == 'function'){
-					delete window.xbmcCallback;
-				}
-			});
-		}
-	}*/
 	var request = new XbmcRequest({
 		method: 'Player.GetItem',
 		settings: {
