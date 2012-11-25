@@ -13,7 +13,11 @@
                 e.onload = e.onreadystatechange = null;
                 scriptDone = true;
                 if (typeof callback == 'function') {
-                    callback(args);
+                    if(args){
+                        callback.apply(global, args);
+                    }else{
+	                    callback();
+                    }
                 }
             }
         };
