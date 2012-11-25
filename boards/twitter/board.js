@@ -10,7 +10,7 @@ TwitterBoard.prototype.init = function(el, config){
 }
 TwitterBoard.prototype.update = function(el, user){
 	if(twitter && twitter.getTimeline){
-		twitter.getTimeline('datagutt', function(tweets){
+		twitter.getTimeline(user, function(tweets){
 			var tweet = tweets[0];
 			el.innerHTML = '<p><a href="http://twitter.com/'+tweet.user.name+'">@'+tweet.user.name+'</a>: <span class="text">'+tweet.text+'</span></p>';
 		});
