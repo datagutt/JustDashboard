@@ -9,9 +9,19 @@
 		var config = {
 			company: 'Datagutt Inc.',
 			boards: {
-			'time': {'grid': '12'},
-			'weather': {'grid': '4', 'location': 'Askim, Norway'},
-			'twitter': {'grid': '12', 'user': 'datagutt'}
+				'time': 
+				{
+					'grid': '12'
+				},
+				'weather': 
+				{
+					'grid': '4', 
+					'location': 'Askim, Norway'
+				},
+				'twitter': {
+					'grid': '12', 
+					'user': 'datagutt'
+				}
 			}
 		};
 	</script>
@@ -93,7 +103,7 @@
 						document.title = document.title.replace('{{ COMPANY }}', config.company);
 					}
 					if(LIB && LIB.isHostMethod(document, 'getElementById')){
-						var companyTitle = document.getElementById('company');							var button = document.getElementById('btn');
+						var companyTitle = document.getElementById('company');								var button = document.getElementById('btn');
 						// Replace company title
 						companyTitle.innerHTML = companyTitle.innerHTML.replace('{{ COMPANY }}', config.company);
 					}
