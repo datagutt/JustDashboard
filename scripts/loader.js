@@ -8,6 +8,7 @@
         }
         var e = doc.createElement('script');
         var scriptDone = false;
+        e.async = false;
         e.onload = e.onreadystatechange = function () {
             if ((e.readyState && (e.readyState == 'complete' || e.readyState !== 'loaded')) || !scriptDone) {
                 e.onload = e.onreadystatechange = null;

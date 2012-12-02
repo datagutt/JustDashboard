@@ -1,9 +1,9 @@
 var TimeBoard = function(){};
 TimeBoard.prototype.init = function(el){
 	var self = this;
-	el.innerHTML = self.update();
+	self.update(el);
 	setInterval(function(){
-		el.innerHTML = self.update();
+		self.update(el);
 	}, 1000);
 }
 
@@ -16,7 +16,7 @@ TimeBoard.prototype.getMonthName = function(date) {
 	];
     return monthNames[date.getMonth()];
 };
-TimeBoard.prototype.update = function(){
+TimeBoard.prototype.update = function(el){
 	var now = new Date();
 	var hr = now.getHours();
 	if(hr > 12){
@@ -43,5 +43,5 @@ TimeBoard.prototype.update = function(){
 	}
 	var day = now.getDate();
 	var month = this.getMonthName(now);
-	return '<div class="clock">'+hr+ ':'+mn+':'+sc+ ' '+(hr >= 12 ? 'PM' : 'AM')+'</div><div class="date">'+day+' '+month+', '+year+'</div>';
+	el.innerHTML = '<div class="clock">'+hr+ ':'+mn+':'+sc+ ' '+(hr >= 12 ? 'PM' : 'AM')+'</div><div class="date">'+day+' '+month+', '+year+'</div>';
 }
