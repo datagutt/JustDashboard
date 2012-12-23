@@ -18,10 +18,66 @@ var XbmcRequest = function XbmcRequest(options, el) {
 	if(options.callback != null){
 		websocket.onmessage = function(evt){ 
 		console.log(evt.data);
-			result = options.callback(el, JSON.parse(evt.data));
+			result = options.callback(options.settings, JSON.parse(evt.data));
 		};
 	}
 	return result;
+};
+var makeControls = function(settings){
+	var self = this, host = settings.host, port = settings.port, el = settings.el;
+	var playPause = function(){
+		var request = new XbmcRequest({
+			method: 'Player.PlayPause',
+			settings: {
+				host: host,
+				port: port,
+				el: el
+			},
+			params: {
+				playerid: 1
+			},
+			callback: makeControls
+		}, el);
+	};
+	var stop = function(){
+		var request = new XbmcRequest({
+			method: 'Player.Stop',
+			settings: {
+				host: host,
+				port: port,
+				el: el
+			},
+			params: {
+				playerid: 1
+			},
+			callback: makeControls
+		}, el);
+	};
+	if(LIB.query('#controls').length == 0){
+		var controls = document.createElement('div');
+		controls.id = 'controls';
+		var playPauseButton = document.createElement('button');
+		playPauseButton.id = 'playPauseButton';
+		playPauseButton.innerHTML = 'Play';
+		controls.appendChild(playPauseButton);
+		
+		var stopButton = document.createElement('button');
+		stopButton.id = 'stopButton';
+		stopButton.innerHTML = 'Stop';
+		controls.appendChild(stopButton);
+		
+		el.appendChild(controls);
+		
+		setTimeout(function(){
+			LIB.query('#playPauseButton')[0].onclick = function(){
+				playPause();
+			};
+			LIB.query('#stopButton')[0].onclick = function(){
+				stop();
+			};
+		}, 10);
+		
+	}
 };
 var XbmcBoard = function(){};
 XbmcBoard.prototype.init = function(el, config){
@@ -31,9 +87,9 @@ XbmcBoard.prototype.init = function(el, config){
 		self.update(el, config.host, config.port);
 	}, 1 * 60 * 1000);
 }
-XbmcBoard.prototype.callback = function(el, parsed){
+XbmcBoard.prototype.callback = function(settings, parsed){
 	var self = this;
-	var item, showtitle = '', season = 0, episode = 0, title = '';
+	var item, showtitle = '', season = 0, episode = 0, title = '', el = settings.el;
 	el.innerHTML = '<h2>XBMC</h2>';
 	if(parsed){
 		if(parsed.result && parsed.result.item){
@@ -48,6 +104,7 @@ XbmcBoard.prototype.callback = function(el, parsed){
 		}else{
 			el.innerHTML += '<div id="nowplaying">Nothing playing</div>';
 		}
+		makeControls(settings);
 	}else{
 		el.innerHTML += '<p>Can not load XBMC data</p>';
 	}
@@ -62,10 +119,11 @@ XbmcBoard.prototype.update = function(el, host, port){
 		settings: {
 			host: host,
 			port: port,
+			el: el
 		},
 		params: {
 			playerid: 1
 		},
 		callback: self.callback
-	}, el);
+	});
 }

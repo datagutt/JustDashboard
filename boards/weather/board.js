@@ -22,9 +22,9 @@ WeatherBoard.prototype.callback = function(data){
 		var city = result.channel.location.city;
 		var temp = result.channel.item.condition.temp;
 		if(country && city && temp){
-			el.innerHTML = '<p>Weather for '+city+', '+country+' is '+temp+'&deg;'+unit+'</p>';
+			el.innerHTML = '<h2>Weather</h2><p>'+temp+'&deg;'+unit+'</p><p>'+city+', '+country+'</p>';
 		}else{
-			el.innerHTML = '<p>No weather found for '+location+'</p>';
+			el.innerHTML = '<h2>Weather</h2><p>No weather found for '+location+'</p>';
 		}
 	}
 }
